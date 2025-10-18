@@ -1,7 +1,10 @@
 import pytest
 import requests
 
-BASE_URL = "http://127.0.0.1:5000"
+# --------------------------------------------------------
+# Base URL (your backend runs at /api)
+# --------------------------------------------------------
+BASE_URL = "http://127.0.0.1:5000/api"
 
 
 @pytest.fixture(scope="session")
@@ -26,12 +29,12 @@ def user_data():
 def login_session(session, user_data):
     """Registers and logs in user, returning an authenticated session."""
     # Register (ignore if already exists)
-    reg = session.post(f"{BASE_URL}/register", json=user_data)
+    reg = session.post(f"{BASE_URL}/auth/register", json=user_data)
     if reg.status_code not in [200, 201, 409]:
         pytest.fail(f"Unexpected register status: {reg.status_code} - {reg.text}")
 
     # Login
-    login = session.post(f"{BASE_URL}/login", json={
+    login = session.post(f"{BASE_URL}/auth/login", json={
         "email": user_data["email"],
         "password": user_data["password"]
     })
