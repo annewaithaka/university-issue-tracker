@@ -1,56 +1,64 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
-import { useState } from "react";
+import "../styles/Login.css";
 
-export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+const Login = ({ setUser }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const res = await api.post("/auth/login", form); // ✅ includes cookies automatically
-      console.log(res.data);
-      window.location.href = "/dashboard"; // redirect after login
+      const res = await api.post("/auth/login", { email, password });
+      const loggedInUser = res.data?.user;
+
+      if (!loggedInUser) {
+        setError("Unexpected server response. Please try again.");
+        return;
+      }
+
+      setUser(loggedInUser);
+
+      if (loggedInUser.role === "admin") navigate("/admin");
+      else if (loggedInUser.role === "incharge") navigate("/incharge");
+      else navigate("/dashboard");
     } catch (err) {
-      console.error(err);
-      setError("❌ Invalid email or password.");
+      setError(err.response?.data?.error || "Invalid credentials. Try again.");
     }
   };
 
   return (
-    <div className="flex flex-col items-center mt-20">
-      <h1 className="text-2xl font-semibold mb-4">Login</h1>
-      <form onSubmit={handleSubmit} className="w-80 bg-white p-6 rounded shadow">
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className="border p-2 w-full mb-3 rounded"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          className="border p-2 w-full mb-3 rounded"
-        />
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700"
-        >
-          Login
-        </button>
-      </form>
+    <div className="login-container">
+      <div className="login-card">
+        <h1 className="login-title">University Issue Tracker</h1>
+
+        {error && <div className="error-msg">{error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   );
-}
+};
+
+export default Login;

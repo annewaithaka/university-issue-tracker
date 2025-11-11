@@ -1,143 +1,321 @@
-/* ===== Admin Dashboard Styles ===== */
+/* ===========================
+   Admin Dashboard Styles
+=========================== */
 
-.admin-dashboard {
+/* ===== General Layout ===== */
+.dashboard-layout {
+  display: flex;
   min-height: 100vh;
-  background-color: #f9fafb;
+  font-family: 'Inter', sans-serif;
+  background: #f3f6fb;
+  color: #1f2937;
+}
+
+/* ===== Sidebar / Navbar ===== */
+.sidebar {
+  width: 220px;
+  background: #1e3a8a; /* deep navy */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1rem;
+  gap: 2rem;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+}
+
+.sidebar h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.sidebar button {
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+  background: #2563eb; /* highlight blue */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ===== Main Content ===== */
+.main {
+  flex: 1;
   padding: 2rem;
 }
 
-.admin-header {
+/* ===== Header ===== */
+.dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
 }
 
-.admin-header h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
+.dashboard-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e3a8a;
 }
 
-.issue-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.issue-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  padding: 1.25rem;
-  transition: all 0.25s ease;
+.logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
   cursor: pointer;
-}
-
-.issue-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-}
-
-.issue-card h3 {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.issue-meta {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
-}
-
-.issue-status {
-  display: inline-block;
-  font-size: 0.875rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 8px;
   font-weight: 500;
+  transition: background 0.3s;
 }
 
-.status-pending {
-  background-color: #fef3c7;
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+/* ===== Tabs ===== */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.tabs button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px 6px 0 0;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+
+.tabs button.active {
+  background: #2563eb;
+  color: white;
+}
+
+.tabs button:not(.active) {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.tabs button:not(.active):hover {
+  background: #d1d5db;
+}
+
+/* ===== Cards ===== */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* ===== Tables ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+thead {
+  background: #1e3a8a;
+  color: white;
+}
+
+th, td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+tr:hover {
+  background: #f3f4f6;
+}
+
+/* ===== Forms ===== */
+input, select, textarea, button {
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+input, select, textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+}
+
+button {
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.25s, transform 0.15s;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.bg-blue {
+  background: #2563eb;
+  color: white;
+}
+
+.bg-blue:hover {
+  background: #1e40af;
+}
+
+.bg-red {
+  background: #ef4444;
+  color: white;
+}
+
+.bg-red:hover {
+  background: #dc2626;
+}
+
+.bg-yellow {
+  background: #fbbf24;
+  color: white;
+}
+
+.bg-yellow:hover {
+  background: #f59e0b;
+}
+
+/* ===== Filters / Selects ===== */
+select {
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  padding: 6px;
+}
+
+/* ===== Status Badges ===== */
+.status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.status-Pending {
+  background: #fef3c7;
   color: #92400e;
 }
 
-.status-resolved {
-  background-color: #d1fae5;
+.status-Assigned {
+  background: #bfdbfe;
+  color: #1e3a8a;
+}
+
+.status-In\ Progress {
+  background: #93c5fd;
+  color: #1e3a8a;
+}
+
+.status-Completed {
+  background: #d1fae5;
   color: #065f46;
 }
 
-.admin-footer {
-  text-align: center;
-  margin-top: 2rem;
-  color: #6b7280;
-  font-size: 0.9rem;
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 1rem;
+  }
+  .sidebar h2 {
+    display: none;
+  }
+  .main {
+    padding: 1rem;
+  }
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  tr {
+    margin-bottom: 1rem;
+  }
+  td {
+    padding-left: 50%;
+    position: relative;
+  }
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    font-weight: 600;
+    padding-left: 0.75rem;
+  }
 }
 
-/* ===== Modal Styles ===== */
-.modal-overlay {
-  position: fixed;
+/* Navbar */
+nav {
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  z-index: 30;
 }
 
-.modal {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  width: 500px;
-  max-width: 90%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* Sidebar - mobile transition handled by Tailwind classes */
+/* AdminDashboard.css or Sidebar overrides */
+
+/* Sidebar background */
+aside {
+  background: #1e40af; /* Indigo blue */
+  color: white;
 }
 
-.modal h2 {
-  margin-bottom: 0.5rem;
+/* Sidebar links */
+aside a {
+  transition: all 0.2s;
+}
+
+aside a:hover {
+  background: #2563eb; /* lighter blue */
+  color: white;
+}
+
+/* Active link */
+aside a.active {
+  background: #3b82f6; /* bright blue */
+  color: white;
   font-weight: 600;
 }
 
-.modal-actions {
-  margin: 1rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1.5rem;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.btn-danger {
-  background-color: #ef4444;
-  color: white;
-  border: none;
-}
-
-.btn-danger:hover {
-  background-color: #dc2626;
-}
-
-.btn-secondary {
-  background-color: #e5e7eb;
-  color: #111827;
-  border: none;
-}
-
-.btn-secondary:hover {
-  background-color: #d1d5db;
-}
