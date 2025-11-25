@@ -18,8 +18,6 @@ class User(db.Model, UserMixin):
     department = db.Column(db.String(100))
     year = db.Column(db.String(20))
 
-    # issues = db.relationship('Issue', backref='user', lazy=True)
-
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
@@ -40,18 +38,32 @@ class Issue(db.Model):
     status = db.Column(db.String(50), default='Pending')
     category = db.Column(db.String(100))
 
-
-    # Track when the issue is created and when completed
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     completed_at = db.Column(db.DateTime, nullable=True)
 
     # Foreign keys
-    reported_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     assigned_to_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     # Relationships
-    reported_by = db.relationship('User', foreign_keys=[reported_by_id], backref='reported_issues')
-    assigned_to = db.relationship('User', foreign_keys=[assigned_to_id], backref='assigned_issues')
+    reporter = db.relationship(
+        'User',
+        foreign_keys=[reporter_id],
+        backref='reported_issues'
+    )
+
+    assigned_to = db.relationship(
+        'User',
+        foreign_keys=[assigned_to_id],
+        backref='assigned_issues'
+    )
+
+    # 🔥 Add this relationship for comments
+    comments = db.relationship(
+        "Comment",
+        backref=db.backref("issue", passive_deletes=True),
+        cascade="all, delete-orphan"
+    )
 
     def mark_complete(self):
         """Mark issue as complete and record completion time."""
@@ -60,3 +72,20 @@ class Issue(db.Model):
 
     def __repr__(self):
         return f"<Issue {self.title}>"
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    issue_id = db.Column(
+        db.Integer,
+        db.ForeignKey('issue.id', ondelete="CASCADE"),   # <-- ADD THIS
+        nullable=False
+    )
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    comment_text = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships
+    author = db.relationship('User')
+
+    def __repr__(self):
+        return f"<Comment by {self.author.name} on Issue {self.issue_id}>"

@@ -35,7 +35,7 @@ const Login = ({ setUser }) => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1 className="login-title">University Issue Tracker</h1>
+        <h1 className="login-title">KCA ISSUE TICKETING SYSTEM</h1>
 
         {error && <div className="error-msg">{error}</div>}
 

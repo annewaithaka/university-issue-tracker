@@ -3,6 +3,7 @@ from app import app, db
 from models import User, Issue
 
 with app.app_context():
+    # Reset database
     db.drop_all()
     db.create_all()
 
@@ -10,10 +11,21 @@ with app.app_context():
     admin = User(name="Admin", email="admin@kca.ac.ke", role="admin")
     admin.set_password("admin123")
 
-    incharge = User(name="Eng. Mary Njeri", email="mary.njeri@kca.ac.ke", role="incharge", department="Electrical Engineering")
+    incharge = User(
+        name="Eng. Mary Njeri",
+        email="mary.njeri@kca.ac.ke",
+        role="incharge",
+        department="Electrical Engineering"
+    )
     incharge.set_password("mary123")
 
-    user = User(name="Carl James", email="carl@gmail.com", role="user", department="Electrical Engineering", year="2nd Year")
+    user = User(
+        name="Carl James",
+        email="carl@gmail.com",
+        role="user",
+        department="Electrical Engineering",
+        year="2nd Year"
+    )
     user.set_password("carl123")
 
     db.session.add_all([admin, incharge, user])
@@ -25,7 +37,8 @@ with app.app_context():
         description="The projector in Hall 3 is not turning on.",
         category="Equipment",
         status="Pending",
-        reported_by=user
+        reporter_id=user.id,          # ✅ corrected field
+        assigned_to_id=incharge.id    # optional: assign to incharge
     )
 
     issue2 = Issue(
@@ -33,7 +46,8 @@ with app.app_context():
         description="No Wi-Fi connectivity in the Computer Lab.",
         category="Network",
         status="Pending",
-        reported_by=user
+        reporter_id=user.id,
+        assigned_to_id=incharge.id
     )
 
     issue3 = Issue(
@@ -41,7 +55,8 @@ with app.app_context():
         description="Sparks when plugging equipment.",
         category="Maintenance",
         status="Pending",
-        reported_by=user
+        reporter_id=user.id,
+        assigned_to_id=incharge.id
     )
 
     db.session.add_all([issue1, issue2, issue3])

@@ -2,6 +2,7 @@
 from flask import Flask, jsonify
 from flask_login import LoginManager
 from flask_cors import CORS
+from sqlalchemy.orm import Session
 from models import db, bcrypt, User
 from routes.auth_routes import auth_bp
 from routes.incharge_routes import incharge_bp
@@ -27,7 +28,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
 
 # Session cookie settings for React (withCredentials)
 app.config["SESSION_COOKIE_SAMESITE"] = "None"  # must be None for cross-site cookies
-app.config["SESSION_COOKIE_SECURE"] = False    # True if HTTPS, False for localhost
+app.config["SESSION_COOKIE_SECURE"] = True    # True if HTTPS, False for localhost
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 
 # -----------------------------------------------------------
@@ -50,9 +51,13 @@ bcrypt.init_app(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "auth.login"
 
+
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    from sqlalchemy.orm import Session
+    with Session(db.engine) as session:
+        return session.get(User, int(user_id))
+
 
 @login_manager.unauthorized_handler
 def unauthorized():
